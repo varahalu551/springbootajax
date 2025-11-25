@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Welcome to Spring Boot</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    
+    </head>
+    <body>
+      <button id="loaduser">Load Users</button>
+      <div id="result"></div>
+      <hr>
+      <form id="userForm">
+        Name: <input type="text" id="name" name="name"><br>
+        Email: <input type="text" id="email" name="email"><br>
+        <input type="submit" value="Submit">
+
+      </form>              
+
+      <script>
+           $("#loaduser").click(function(){
+             $.ajax({
+                url:"/users",
+                type:"GET",
+                success:function(data){
+                   // $("#result").html(JSON.stringify(data));
+                   let table=`<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;"
+                      <thead><tr><th>ID</th><th>Name</th><th>Email</th></tr></thead><tbody>`;
+
+                        data.forEach(user=>{
+                            table+=`<tr>
+                                      <td>${user.id}</td>
+                                      <td>${user.name}</td>
+                                      <td>${user.email}</td>
+                                </tr>`;
+                        });
+                        table+=`</tbody></table>`;
+                        $("#result").html(table);
+                },
+                error: function(error){
+                    console.log("Error:",error)
+                }
+             })
+
+           })
+
+           //----------------Post User----------------//
+           $("#userForm").submit(function(e){
+                e.preventDefault();
+                const userData={
+                    name:$("#name").val(),
+                    email:$("#email").val()
+                      };
+
+                      $.ajax({
+                        url:"/saveUser",
+                        type:"POST",
+                        contentType:"application/json",
+                        data:JSON.stringify(userData),
+                        success:function(response){
+                            alert("User Saved Successfully!");
+                            $("#userForm")[0].reset();
+                        },
+                        error:function(error){
+                            console.log("Error",error);
+                        }
+                      })
+           })
+
+      </script>
+    </body>
+</html>
