@@ -8,18 +8,21 @@
     
     </head>
     <body>
-      <button id="loaduser">Load Users</button>
-      <div id="result"></div>
+      <!--<button id="loaduser">Load Users</button>-->
+     
       <hr>
       <form id="userForm">
         Name: <input type="text" id="name" name="name"><br>
         Email: <input type="text" id="email" name="email"><br>
         <input type="submit" value="Submit">
 
-      </form>              
-
+      </form>
+      <hr>              
+ <div id="result"></div>
+ 
       <script>
-           $("#loaduser").click(function(){
+          // $("#loaduser").click(function()
+          function loadUsersData(){
              $.ajax({
                 url:"/users",
                 type:"GET",
@@ -43,7 +46,8 @@
                 }
              })
 
-           })
+           //})
+            }
 
            //----------------Post User----------------//
            $("#userForm").submit(function(e){
@@ -61,13 +65,18 @@
                         success:function(response){
                             alert("User Saved Successfully!");
                             $("#userForm")[0].reset();
+                            loadUsersData();
                         },
                         error:function(error){
                             console.log("Error",error);
                         }
                       })
            })
+              //---------------Load Users on Page Load----------------//
 
+           $(document).ready(function(){
+            loadUsersData();
+           });
       </script>
     </body>
 </html>
